@@ -1,13 +1,18 @@
 import "./App.css";
-import {CreateBrowserRouter , createRoutesFromElements , Route , RouterProvider} from 'react-router-dom'
-const router = CreateBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<h1>This is the index page</h1>}></Route>)
+import {createBrowserRouter , createRoutesFromElements , Route , RouterProvider} from 'react-router-dom'
+import Layout from "./components/Layout";
+const router = createBrowserRouter(
+  createRoutesFromElements(<Route path="/" element={<Layout/>}></Route>)
 )
 
 
 function App() {
-  return 
-  <RouterProvider router={router}/>;
+  return <>
+    <RouterProvider router={router}/>;
+  </>
+
+  
+
 
 }
 
