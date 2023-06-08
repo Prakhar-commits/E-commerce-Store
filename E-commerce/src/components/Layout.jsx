@@ -2,6 +2,7 @@ import React from 'react'
 import {CssBaseline, ThemeProvider, createTheme} from "@mui/material"
 import { light } from '@mui/material/styles/createPalette'
 import Header from './Header'
+import { Outlet } from 'react-router-dom'
 
 const theme = createTheme({
     palette : {
@@ -15,7 +16,7 @@ export default function Layout() {
     <ThemeProvider theme={theme}>
         <CssBaseline/>
        <Header/>
-        <main>This is main coming from the layout component</main>
+        <Outlet/>
         <footer></footer>
     </ThemeProvider>
     
