@@ -13,10 +13,14 @@ import {
 } from "@mui/material";
 import {ShoppingCartSharp} from '@mui/icons-material'
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart-slice";
+const dispatch = useDispatch();
 
 export function Home() {
   const theme = useTheme();
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
   async function fetchAllProducts() {
     const response = await fetch("https://fakestoreapi.com/products");
@@ -27,6 +31,12 @@ export function Home() {
   useEffect(() => {
     fetchAllProducts();
   }, []);
+
+
+function addProductToCart(product){
+  dispatch(addToCart({product,quantity:1}));
+}
+
   return (
     <Container sx={{ py: 8 }} maxWidth="lg">
       <Grid container spacing={4}>
@@ -74,7 +84,7 @@ export function Home() {
                 <Rating readOnly precision={0.5} value={rating.rate} />
               </CardContent>
               <CardActions sx={{alignSelf:'center'}}>
-                <IconButton variant="contained">
+                <IconButton variant="contained"  onClick={()=>addProductToCart({title,id,price,description , image,rating})}>
                     <ShoppingCartSharp/>
                     Add to Cart
                 </IconButton>
