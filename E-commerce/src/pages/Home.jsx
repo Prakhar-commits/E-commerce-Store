@@ -16,9 +16,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart-slice";
 import { fetchAllProducts } from "../features/product-slice";
+import { useSearchParams } from "react-router-dom";
 
 
 export function Home() {
+  const [searchParams] = useSearchParams();
+  const  category = searchParams.get("category");
+  const searchTerm = searchParams.get('searchterm');
   const theme = useTheme();
   const state = useSelector((state) => state.products);
   const {value : products , loading} = state ?? {};
@@ -29,14 +33,17 @@ if(!products?.length){
   dispatch(fetchAllProducts());
 }
 
-function addProductToCart(product){
+function addProductToCart(product){ 
   dispatch(addToCart({product,quantity:1}));
 }
 
+let filterdProducts =
+ category && category !== "all"? products.filter(prod => prod.category === category) : products;
+filterdProducts = searchTerm? filterdProducts.filter(prod => prod.title.toLowerCase().includes(searchTerm.toLowerCase())) : filterdProducts;
   return (
     <Container sx={{ py: 8 }} maxWidth="lg">
       <Grid container spacing={4}>
-        {products?.map(({ title, id, rating, description, price, image }) => (
+        {filterdProducts?.map(({ title, id, rating, description, price, image }) => (
           <Grid item key={id} xs={12} sm={6} md={3}>
             <Card
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
@@ -63,8 +70,8 @@ function addProductToCart(product){
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    "-webkit-line-clamp": "1",
-                    "-webkit-box-orient": "vertical",
+                    WebkitLineClamp: "1",
+                   WebkitBoxOrient: "vertical",
                   }}
                 >
                   {title}
@@ -73,8 +80,8 @@ function addProductToCart(product){
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    "-webkit-line-clamp": "2",
-                    "-webkit-box-orient": "vertical",
+                    WebkitLineClamp: "2",
+                    WebkitBoxOrient : "vertical",
                   }}>{description}</Typography>
                 <Typography fontSize="large">{price}</Typography>
                 <Rating readOnly precision={0.5} value={rating.rate} />
