@@ -175,14 +175,42 @@ if(searchText){
 
 
 export default function Header() {
-  const {user} = useAuth();
+  const {user , signOut} = useAuth();
   const cartItems = useSelector((state) => state.cart?.value);
   const count = getItemCount(cartItems);
   const navigate = useNavigate();
+  const[anchorEl , setAnchorEl] = useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+  function handleProfileMenuOpen(e){
+    setAnchorEl(e.currentTarget);
+  }
+  function handleMenuClose(){
+    setAnchorEl(null);
+  }
   function navigateToCart(){
    navigate("/cart");
   }
 
+  async function logout(){
+await signOut();
+navigate("/login");
+  }
+const renderMenu = (
+  <Menu anchorEl={anchorEl} id='user-profile-menu' keepMounted transformOrigin={{
+    horizontal:'right',
+    vertical:'top',
+  }}
+  anchorOrigin={{
+    horizontal:'right',
+    vertical:'bottom',
+  }}
+  open={isMenuOpen}
+  onClose={handleMenuClose}>
+<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+<MenuItem onClick={handleMenuClose}> My Account</MenuItem>
+<MenuItem onClick={logout}>Logout</MenuItem>
+  </Menu>
+)
   return (
     <>
       <AppBar position="sticky" sx={{
@@ -204,11 +232,12 @@ export default function Header() {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            {user? <Button color="inherit">Namaste 🙏 {user?. displayName?? user.email}</Button>: <Button color="inherit">Login</Button>}
+            {user?( <Button onClick={handleProfileMenuOpen} color="inherit">Namaste 🙏 {user?. displayName?? user.email}</Button>): (<Button color="inherit">Login</Button>)}
           </Box>
          
         </Toolbar>
       </AppBar>
+      {renderMenu}
     </>
   );
 }
