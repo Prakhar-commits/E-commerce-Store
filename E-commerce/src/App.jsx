@@ -19,7 +19,7 @@ const router = createBrowserRouter(
 function App() {
   return (
 <Provider store={store}>
-<RouterProvider router={router}/>;
+<RouterProvider router={router}/>
 </Provider>   
 )
  
