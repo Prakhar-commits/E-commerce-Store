@@ -7,22 +7,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CardContent, CardMedia, Rating , Card , TextField} from '@mui/material'
 import { useTheme } from '@emotion/react'
 import { getSubtotal } from '../utils'
-import { addToCart } from '../features/cart-slice'
+import { addToCart, removeFromCart } from '../features/cart-slice'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Cart() {
   const cart = useSelector((state)=> state.cart?.value);
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const subtotal =  getSubtotal(cart)?.toFixed(2);
-  function updateQuantity(e,{product,quantity}){
-     const updatedQuantity = e.target.valueAsNumber;
-     if(updatedQuantity < quantity){
-
-     }else{
-        dispatch(addToCart({product}));
-     }
+  function updateQuantity(e, { product, quantity }) {
+    const updatedQuantity = e.target.valueAsNumber;
+    if (updatedQuantity < quantity) {
+      dispatch(removeFromCart({ product }));
+    } else {
+      dispatch(addToCart({ product }));
+    }
   }
+
+function goToHome(){
+  navigate("/");
+}
+
+function checkoutItems(){
+  navigate("/checkout");
+}
+
   return (
   <Container sx={{py:8}}>
   <Grid container spacing={2}>
@@ -62,13 +73,15 @@ export default function Cart() {
                       }}
                       inputProps={{
                         min:0,
-                        max:0,
+                        max:10,
                       }} 
                       id={`${id}-product-id`}
                       type='number'
                       variant='standard'
-                      label="Quantity" value={quantity}
-                      onChange={(e)=>updateQuantity(e,{product ,quantity})}>
+                      label="Quantity"
+                       value={quantity}
+                       onChange={(e)=> updateQuantity(e,{product,quantity})}
+                      >
                       </TextField>
                     </form>
                   </Box>
@@ -99,7 +112,7 @@ export default function Cart() {
         }}>
         <Typography variant='h6'>Subtotal</Typography>
         <Typography variant='h5'>{subtotal}</Typography>
-        {subtotal>0 ? (<Button variant='contained'>Buy now</Button>):( <Button variant='contained' >Shop Products</Button>)}
+        {subtotal>0 ? (<Button variant='contained' onClick={checkoutItems}>Buy now</Button>):( <Button variant='contained' onClick={goToHome} >Shop Products</Button>)}
         </Card>
       </Box>
    
