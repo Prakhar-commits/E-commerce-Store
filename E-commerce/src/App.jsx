@@ -6,11 +6,13 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import { Provider } from "react-redux";
 import {store} from "./store";
+import Checkout from "./pages/Checkout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(<Route path="/" element={<Layout/>}>
     <Route index element={<Home/>}></Route>
     <Route path="/cart" element={<Cart/>}></Route>
+    <Route path="/checkout" element={<Checkout/>}></Route>
     <Route path="/login" element={<Login/>}></Route>
   </Route>)
 )

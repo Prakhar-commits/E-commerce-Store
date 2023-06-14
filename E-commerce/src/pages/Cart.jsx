@@ -110,7 +110,7 @@ function checkoutItems(){
           flexDirection: 'column',
           gap: 2,
         }}>
-        <Typography variant='h6'>Subtotal</Typography>
+        <Typography variant='h4'>Subtotal</Typography>
         <Typography variant='h5'>{subtotal}</Typography>
         {subtotal>0 ? (<Button variant='contained' onClick={checkoutItems}>Buy now</Button>):( <Button variant='contained' onClick={goToHome} >Shop Products</Button>)}
         </Card>
