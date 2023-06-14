@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom'
 export default function Login() {
   const theme = useTheme();
   const navigate = useNavigate();
-  async function login(event){
   const {signIn} = useAuth();
+  async function login(event){
   event.preventDefault();
   const {email, password}= event.target;
   await signIn(email.value , password.value); 
