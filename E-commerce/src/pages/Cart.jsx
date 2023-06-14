@@ -1,17 +1,28 @@
 import React from 'react'
-import {Container} from '@mui/material'
+import {Button, Container} from '@mui/material'
 import {Grid} from '@mui/material'
 import {Box} from '@mui/material'
 import Typography from '@mui/material/Typography'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { CardContent, CardMedia, Rating , Card , TextField} from '@mui/material'
 import { useTheme } from '@emotion/react'
 import { getSubtotal } from '../utils'
+import { addToCart } from '../features/cart-slice'
 
 
 export default function Cart() {
   const cart = useSelector((state)=> state.cart?.value);
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const subtotal =  getSubtotal(cart)?.toFixed(2);
+  function updateQuantity(e,{product,quantity}){
+     const updatedQuantity = e.target.valueAsNumber;
+     if(updatedQuantity < quantity){
+
+     }else{
+        dispatch(addToCart({product}));
+     }
+  }
   return (
   <Container sx={{py:8}}>
   <Grid container spacing={2}>
@@ -36,14 +47,28 @@ export default function Cart() {
                   display:'flex',
                   justifyContent:'space-between',
                   alignItems:'center',
+                  flex: 1,
                  }}>
                   <Box sx={{display:'flex' , flexDirection:'column',gap:2}}>
-                    <Typography>
+                    <Typography variant='h5' sx={{
+                     
+                    }}>
                       {title}
                     </Typography>
                     <Rating readOnly precision={0.5} value={rating.rate}/>
                     <form>
-                      <TextField label="Quantity" value={quantity}>
+                      <TextField xs={{
+                        width: theme.spacing(8),
+                      }}
+                      inputProps={{
+                        min:0,
+                        max:0,
+                      }} 
+                      id={`${id}-product-id`}
+                      type='number'
+                      variant='standard'
+                      label="Quantity" value={quantity}
+                      onChange={(e)=>updateQuantity(e,{product ,quantity})}>
                       </TextField>
                     </form>
                   </Box>
@@ -58,9 +83,26 @@ export default function Cart() {
          );
     })}
 </Grid>
-    <Grid item container md={4}>
-    <Typography variant='h6'>Subtotal</Typography>
-    <Typography variant='h5'>{getSubtotal(cart)}</Typography>
+    <Grid item container md={4} sx={{
+      display:'flex',
+      justifyContent:'center',
+    }}>
+      <Box sx={{
+        width:"100%",
+
+      }}>
+        <Card sx={{
+          padding: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}>
+        <Typography variant='h6'>Subtotal</Typography>
+        <Typography variant='h5'>{subtotal}</Typography>
+        {subtotal>0 ? (<Button variant='contained'>Buy now</Button>):( <Button variant='contained' >Shop Products</Button>)}
+        </Card>
+      </Box>
+   
    </Grid>
     </Grid>
   </Container>
