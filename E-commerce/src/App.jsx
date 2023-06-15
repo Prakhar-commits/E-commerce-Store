@@ -6,9 +6,11 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import { Provider } from "react-redux";
 import {store} from "./store";
+
 import Checkout from "./pages/Checkout";
 import AuthProvider, { useAuth } from "./firebase/Auth";
 import { Alert } from "@mui/material";
+import Register from "./pages/Register";
 
 
 
