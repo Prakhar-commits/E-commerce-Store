@@ -1,5 +1,5 @@
 import "./App.css";
-import {createBrowserRouter , createRoutesFromElements , Route , RouterProvider} from 'react-router-dom'
+import {createBrowserRouter , createRoutesFromElements , Navigate, Route , RouterProvider} from 'react-router-dom'
 import Layout from "./components/Layout";
 import {Home} from "./pages/Home";
 import Cart from "./pages/Cart";
@@ -7,17 +7,36 @@ import Login from "./pages/Login";
 import { Provider } from "react-redux";
 import {store} from "./store";
 import Checkout from "./pages/Checkout";
-import AuthProvider from "./firebase/Auth";
+import AuthProvider, { useAuth } from "./firebase/Auth";
+import { Alert } from "@mui/material";
+
+
+
+function ProtectedRoute({children}){
+const {user} = useAuth();
+  if(!user){
+  return <Navigate to={"/login"}>
+     <Alert color="primary" size="md" />
+   </Navigate>
+  
+  }
+  return children;
+}
 
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
   <Route path="/" element={<Layout/>}>
-    <Route index element={<Home/>}></Route>
-    <Route path="/cart" element={<Cart/>}></Route>
-    <Route path="/checkout" element={<Checkout/>}></Route>
+    <Route index element={<Home/>}/>
+    <Route path="/cart" index element={<Cart/>}/>
+    <Route path="/checkout" index element={
+   <ProtectedRoute>
+     <Checkout/>
+   </ProtectedRoute>
+    }/>
   </Route>
-    <Route path="/login" element={<Login/>}></Route>
+    <Route path="/login" index element={<Login/>}/>
+    <Route path="/register" index element={<Register/>}/>
   </>
   
   )

@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   IconButton,
+  Menu,
   TextField,
   Toolbar,
   Typography,
@@ -22,6 +23,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import {Link} from 'react-router-dom'
 import { useTheme } from "@emotion/react";
 import { useAuth } from "../firebase/Auth";
+import Login from "../pages/Login";
+
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -46,11 +49,11 @@ const StyleAutoComplete=styled(Autocomplete)(({theme})=>({
         color: theme.palette.common.white,
     },
     "& .MuiOutlinedInput-notchedOutline":{
-        border:'none',
+        border:"none",
     },
     "& .MuiSvgIcon-root":{
         fill: theme.palette.common.white, 
-    }
+    },
 }));
 
 const SearchIconWrapper = styled("section")(({theme})=>({
@@ -82,20 +85,19 @@ function SearchBar() {
   const navigate= useNavigate();
 
   useEffect(()=>{
-    setSelectedCategory(category ? category : 'all');
-  },[category])
+    setSelectedCategory(category ? category : "all");
+  },[category]);
   if (!categories.length) {
     dispatch(fetchAllCategories());
   }
   function handleCategoryChange(event) {
     const { value } = event.target;
-    setSelectedCategory(value);
-    navigate(value ==="all"?"/":`/?category=${value}${searchTerm?"&searchterm=" + searchTerm:""}`);
+    navigate(value ==="all"?"/":`/?category=${value}${searchTerm ? "&searchterm=" + searchTerm : ""}`);
   }
 
   function handleSearchChange(searchText){
 if(searchText){
-    navigate(selectedCategory==='all'?`?searchTerm=${searchText}`: `/?category=${selectedCategory}&searchTerm=${searchText}`);
+    navigate(selectedCategory==='all'?`?searchterm=${searchText}`: `/?category=${selectedCategory}&searchterm=${searchText}`);
 }else{
     navigate(selectedCategory==='all'?`/`: `/?category=${selectedCategory}`);
 }
@@ -121,8 +123,8 @@ if(searchText){
                 color:"common.white",
             },
             ".MuiSelect-icon":{
-                fill:"theme.palette.common.white",
-            }
+                fill: theme.palette.common.white,
+            },
           },
         }}
         variant="standard"
@@ -160,7 +162,7 @@ if(searchText){
         disablePortal
         options={Array.from(selectedCategory==="all"? products: products.filter((prod) => prod.category === selectedCategory), (prod) => ({
           id: prod.id,
-          label: prod.title,
+          label: prod.title
         }))}
        
         renderInput={(params) => <TextField {...params} />}
@@ -181,19 +183,21 @@ export default function Header() {
   const navigate = useNavigate();
   const[anchorEl , setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  function navigateToCart(){
+    navigate("/cart");
+  }
+  function login(){
+    navigate("/login")
+  }
   function handleProfileMenuOpen(e){
     setAnchorEl(e.currentTarget);
   }
   function handleMenuClose(){
     setAnchorEl(null);
   }
-  function navigateToCart(){
-   navigate("/cart");
-  }
-
   async function logout(){
-await signOut();
-navigate("/login");
+     await signOut();
+     navigate("/login");
   }
 const renderMenu = (
   <Menu anchorEl={anchorEl} id='user-profile-menu' keepMounted transformOrigin={{
@@ -232,9 +236,8 @@ const renderMenu = (
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            {user?( <Button onClick={handleProfileMenuOpen} color="inherit">Namaste 🙏 {user?. displayName?? user.email}</Button>): (<Button color="inherit">Login</Button>)}
+            {user? <Button onClick={handleProfileMenuOpen} color="inherit">Namaste 🙏 {user. displayName ?? user.email}</Button>: <Button onClick={login} color="inherit" >Login</Button>}
           </Box>
-         
         </Toolbar>
       </AppBar>
       {renderMenu}
