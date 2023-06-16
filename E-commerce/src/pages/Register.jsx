@@ -12,8 +12,18 @@ import {
   Link,
 } from "@mui/material";
 import React from "react";
+import { useAuth } from "../firebase/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const {signUp} = useAuth();
+  const navigate = useNavigate();
+ async function registerUser(event){
+      event.preventDefault();
+      const data= new FormData(event.currentTarget);
+     await signUp(data.get("email"), data.get("password") , data.get("name"));
+     navigate("/login");
+  }
   return ( <Container component={"main"} maxWidth="xs">
       <CssBaseline />
       <Box
@@ -40,7 +50,7 @@ export default function Register() {
           sx={{
             mt: 3,
           }}
-        >
+         onSubmit={registerUser}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -68,6 +78,7 @@ export default function Register() {
                 name="password"
                 id="password"
                 label="Password"
+                type="password"
                 fullWidth
                 required
                 autoComplete="new-password"
