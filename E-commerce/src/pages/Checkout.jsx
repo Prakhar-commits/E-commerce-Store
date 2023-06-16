@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import AddressForm from "../components/AddressForm";
+import PaymentsForm from "../components/PaymentsForm";
 
 const steps = ["Shipping Address", "Payment Details", "Review Order"];
 
@@ -18,7 +19,7 @@ function getStepContent(activeStep) {
     case 0:
       return <AddressForm/>;
     case 1:
-      return <h1>payment details</h1>;
+      return <PaymentsForm/>
     case 2:
       return <h1>review</h1>;
     default:
