@@ -28,6 +28,7 @@ function getStepContent(activeStep) {
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
+  
   function handleNext() {
     setActiveStep(activeStep + 1);
   }
