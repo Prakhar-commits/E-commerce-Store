@@ -7,22 +7,26 @@ import {
   StepLabel,
   Box,
   Button,
+  Link,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddressForm from "../components/AddressForm";
 import PaymentsForm from "../components/PaymentsForm";
 import ReviewForm from "../components/ReviewForm";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../features/cart-slice";
+import { clearCheckoutInformation } from "../features/checkout-slice";
 
 const steps = ["Shipping Address", "Payment Details", "Review Order"];
 
 function getStepContent(activeStep) {
   switch (activeStep) {
     case 0:
-      return <AddressForm/>;
+      return <AddressForm />;
     case 1:
-      return <PaymentsForm/>
+      return <PaymentsForm />;
     case 2:
-      return <ReviewForm/>
+      return <ReviewForm />;
     default:
       throw new Error("Unknown Step");
   }
@@ -30,7 +34,13 @@ function getStepContent(activeStep) {
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
-  
+  const dispatch = useDispatch();
+   useEffect(()=>{
+    if(activeStep === steps.length){
+    dispatch(clearCart());
+    dispatch(clearCheckoutInformation());
+    }
+   },[activeStep])
   function handleNext() {
     setActiveStep(activeStep + 1);
   }
@@ -77,17 +87,26 @@ export default function Checkout() {
               Your order Number is #132. We have emailed you the details
               regarding order confirmation
             </Typography>
+            <Link href="/">Shop More</Link>
           </>
         ) : (
           <>
             {getStepContent(activeStep)}
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              {activeStep !== 0 && 
-                <Button sx={{mt:3 , ml:1,}} onClick={handleBack} variant="contained">
+              {activeStep !== 0 && (
+                <Button
+                  sx={{ mt: 3, ml: 1 }}
+                  onClick={handleBack}
+                  variant="contained"
+                >
                   Back
                 </Button>
-              }
-              <Button sx={{mt:3 , ml:1,}} onClick={handleNext} variant="contained">
+              )}
+              <Button
+                sx={{ mt: 3, ml: 1 }}
+                onClick={handleNext}
+                variant="contained"
+              >
                 {activeStep === steps.length - 1 ? "Place Order" : "Next"}
               </Button>
             </Box>
