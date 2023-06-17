@@ -16,7 +16,9 @@ export default function Layout() {
     <ThemeProvider theme={theme}>
         <CssBaseline/>
        <Header/>
+       <main>
         <Outlet/>
+        </main>
         <footer></footer>
     </ThemeProvider>
     

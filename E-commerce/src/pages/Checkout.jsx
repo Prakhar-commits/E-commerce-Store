@@ -7,7 +7,6 @@ import {
   StepLabel,
   Box,
   Button,
-  Link,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddressForm from "../components/AddressForm";
@@ -16,6 +15,7 @@ import ReviewForm from "../components/ReviewForm";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../features/cart-slice";
 import { clearCheckoutInformation } from "../features/checkout-slice";
+import { Link } from "react-router-dom";
 
 const steps = ["Shipping Address", "Payment Details", "Review Order"];
 
@@ -59,14 +59,13 @@ export default function Checkout() {
         variant="outlined"
         sx={{
           my: { xs: 3, md: 6 },
-          P: { xs: 2, md: 3 },
+          p: { xs: 2, md: 3 },
         }}
       >
         <Typography
           variant="h4"
-          component="h2"
-          display="flex"
-          justifyContent="center"
+          component="h1"
+          align="center"
         >
           Checkout
         </Typography>

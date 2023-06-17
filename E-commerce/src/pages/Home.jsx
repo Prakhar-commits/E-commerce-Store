@@ -10,6 +10,7 @@ import {
   IconButton,
   Rating,
   Typography,
+  Button,
 } from "@mui/material";
 import {ShoppingCartSharp} from '@mui/icons-material'
 import React, { useEffect, useState } from "react";
@@ -38,8 +39,8 @@ function addProductToCart(product){
 }
 
 let filterdProducts =
- category && category !== "all"? products.filter(prod => prod.category === category) : products;
-  filterdProducts = searchTerm? filterdProducts.filter(prod => prod.title.toLowerCase().includes(searchTerm.toLowerCase())) : filterdProducts;
+ category && category !== "all"? products.filter((prod) => prod.category === category) : products;
+  filterdProducts = searchTerm ? filterdProducts.filter((prod) => prod.title.toLowerCase().includes(searchTerm.toLowerCase())) : filterdProducts;
   return (
     <Container sx={{ py: 8 }} maxWidth="lg">
       <Grid container spacing={4}>
@@ -83,14 +84,14 @@ let filterdProducts =
                     WebkitLineClamp: "2",
                     WebkitBoxOrient : "vertical",
                   }}>{description}</Typography>
-                <Typography fontSize="large">{price}</Typography>
+                <Typography fontSize="large" paragraph>{price}</Typography>
                 <Rating readOnly precision={0.5} value={rating.rate} />
               </CardContent>
               <CardActions sx={{alignSelf:'center'}}>
-                <IconButton variant="contained"  onClick={()=>addProductToCart({title,id,price,description , image,rating})}>
+                <Button variant="contained"  onClick={()=>addProductToCart({title,id,price,description , image,rating})}>
                     <ShoppingCartSharp/>
                     Add to Cart
-                </IconButton>
+                </Button>
               </CardActions>
             </Card>
           </Grid>

@@ -88,7 +88,7 @@ export default function Register() {
            <Button type="submit" fullWidth variant='contained' sx={{
             mt:3, mb:2
            }}>Register</Button>
-           <Grid container justifyContent={"center"}>
+           <Grid container justifyContent={"flex-end"}>
             <Grid item>
              <Link variant="body2" href="/login">Already have an account? Sign In</Link>
             </Grid>

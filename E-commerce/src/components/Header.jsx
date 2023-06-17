@@ -19,12 +19,11 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { fetchAllCategories } from "../features/categories-slice";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import SearchIcon from '@mui/icons-material/Search';
-import {Link} from 'react-router-dom'
+import SearchIcon from "@mui/icons-material/Search";
+import { Link } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { useAuth } from "../firebase/Auth";
 import Login from "../pages/Login";
-
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -39,38 +38,38 @@ const Search = styled("section")(({ theme }) => ({
   width: "100%",
 }));
 
-const StyleAutoComplete=styled(Autocomplete)(({theme})=>({
-    color:"inherit",
-    width:"100%",
-    "& .MuiTextField-root":{
-        paddingRight:`calc(1em + ${theme.spacing(4)})`
-    },
-    "& .MuiInputBase-input":{
-        color: theme.palette.common.white,
-    },
-    "& .MuiOutlinedInput-notchedOutline":{
-        border:"none",
-    },
-    "& .MuiSvgIcon-root":{
-        fill: theme.palette.common.white, 
-    },
+const StyleAutoComplete = styled(Autocomplete)(({ theme }) => ({
+  color: "inherit",
+  width: "100%",
+  "& .MuiTextField-root": {
+    paddingRight: `calc(1em + ${theme.spacing(4)})`,
+  },
+  "& .MuiInputBase-input": {
+    color: theme.palette.common.white,
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+  },
+  "& .MuiSvgIcon-root": {
+    fill: theme.palette.common.white,
+  },
 }));
 
-const SearchIconWrapper = styled("section")(({theme})=>({
-    padding: theme.spacing(0,2),
-    height: "100%",
-    position:"absolute",
-    right:0,
-    pointerEvents:"none",
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
+const SearchIconWrapper = styled("section")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  right: 0,
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
-const StyledLink = styled(Link)(({theme})=>({
- color: theme.palette.common.white,
- textDecoration: 'none',
-})); 
+const StyledLink = styled(Link)(({ theme }) => ({
+  color: theme.palette.common.white,
+  textDecoration: "none",
+}));
 
 function SearchBar() {
   const theme = useTheme();
@@ -79,28 +78,38 @@ function SearchBar() {
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchParams] = useSearchParams();
-  const  category = searchParams.get("category");
+  const category = searchParams.get("category");
   const searchTerm = searchParams.get("searchTerm");
-  const [selectedProduct , setSelectedProduct] = useState(null);
-  const navigate= useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     setSelectedCategory(category ? category : "all");
-  },[category]);
+  }, [category]);
   if (!categories.length) {
     dispatch(fetchAllCategories());
   }
   function handleCategoryChange(event) {
     const { value } = event.target;
-    navigate(value ==="all"?"/":`/?category=${value}${searchTerm ? "&searchterm=" + searchTerm : ""}`);
+    navigate(
+      value === "all"
+        ? "/"
+        : `/?category=${value}${searchTerm ? "&searchterm=" + searchTerm : ""}`
+    );
   }
 
-  function handleSearchChange(searchText){
-if(searchText){
-    navigate(selectedCategory==='all'?`?searchterm=${searchText}`: `/?category=${selectedCategory}&searchterm=${searchText}`);
-}else{
-    navigate(selectedCategory==='all'?`/`: `/?category=${selectedCategory}`);
-}
+  function handleSearchChange(searchText) {
+    if (searchText) {
+      navigate(
+        selectedCategory === "all"
+          ? `?searchterm=${searchText}`
+          : `/?category=${selectedCategory}&searchterm=${searchText}`
+      );
+    } else {
+      navigate(
+        selectedCategory === "all" ? `/` : `/?category=${selectedCategory}`
+      );
+    }
   }
   return (
     <Search>
@@ -111,19 +120,19 @@ if(searchText){
           m: 1,
           textTransform: "capitalize",
           "&": {
-            "::before":{
-                ":hover":{
-                    border:'none',
-                },
+            "::before": {
+              ":hover": {
+                border: "none",
+              },
             },
-            "::before, & :: after":{
-                border:'none',
+            "::before, & :: after": {
+              border: "none",
             },
-            ".MuiSelect-standard":{
-                color:"common.white",
+            ".MuiSelect-standard": {
+              color: "common.white",
             },
-            ".MuiSelect-icon":{
-                fill: theme.palette.common.white,
+            ".MuiSelect-icon": {
+              fill: theme.palette.common.white,
             },
           },
         }}
@@ -153,79 +162,89 @@ if(searchText){
         ))}
       </Select>
       <StyleAutoComplete
-      value={selectedProduct}
-      freeSolo
-      id="selected-product"
-      onChange={(e, value)=>{
-        handleSearchChange(value?.label)
-      }}
+        value={selectedProduct}
+        freeSolo
+        id="selected-product"
+        onChange={(e, value) => {
+          handleSearchChange(value?.label);
+        }}
         disablePortal
-        options={Array.from(selectedCategory==="all"? products: products.filter((prod) => prod.category === selectedCategory), (prod) => ({
-          id: prod.id,
-          label: prod.title
-        }))}
-       
+        options={Array.from(
+          selectedCategory === "all"
+            ? products
+            : products.filter((prod) => prod.category === selectedCategory),
+          (prod) => ({
+            id: prod.id,
+            label: prod.title,
+          })
+        )}
         renderInput={(params) => <TextField {...params} />}
       />
       <SearchIconWrapper>
-        <SearchIcon/>
+        <SearchIcon />
       </SearchIconWrapper>
     </Search>
   );
 }
 
-
-
 export default function Header() {
-  const {user , signOut} = useAuth();
+  const { user, signOut } = useAuth();
   const cartItems = useSelector((state) => state.cart?.value);
   const count = getItemCount(cartItems);
   const navigate = useNavigate();
-  const[anchorEl , setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  function navigateToCart(){
+  function navigateToCart() {
     navigate("/cart");
   }
-  function login(){
-    navigate("/login")
+  function login() {
+    navigate("/login");
   }
-  function handleProfileMenuOpen(e){
+  function handleProfileMenuOpen(e) {
     setAnchorEl(e.currentTarget);
   }
-  function handleMenuClose(){
+  function handleMenuClose() {
     setAnchorEl(null);
   }
-  async function logout(){
-     await signOut();
-     navigate("/login");
+  async function logout() {
+    await signOut();
+    navigate("/login");
   }
-const renderMenu = (
-  <Menu anchorEl={anchorEl} id='user-profile-menu' keepMounted transformOrigin={{
-    horizontal:'right',
-    vertical:'top',
-  }}
-  anchorOrigin={{
-    horizontal:'right',
-    vertical:'bottom',
-  }}
-  open={isMenuOpen}
-  onClose={handleMenuClose}>
-<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-<MenuItem onClick={handleMenuClose}> My Account</MenuItem>
-<MenuItem onClick={logout}>Logout</MenuItem>
-  </Menu>
-)
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      id="user-profile-menu"
+      keepMounted
+      transformOrigin={{
+        horizontal: "right",
+        vertical: "top",
+      }}
+      anchorOrigin={{
+        horizontal: "right",
+        vertical: "bottom",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}> My Account</MenuItem>
+      <MenuItem onClick={logout}>Logout</MenuItem>
+    </Menu>
+  );
   return (
     <>
-      <AppBar position="sticky" sx={{
-        py:1,
-      }}>
-        <Toolbar sx={{display:'flex' , gap: 2,}}>
+      <AppBar
+        position="sticky"
+        sx={{
+          py: 1,
+        }}
+      >
+        <Toolbar sx={{ display: "flex", gap: 2 }}>
           <Typography variant="h6" color="inherit">
             <StyledLink to="/">Ecomm</StyledLink>
           </Typography>
           <SearchBar />
-          <Box flexBasis={700} sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box flexBasis={650} sx={{ display: {  md: "flex" } }}>
             <IconButton
               onClick={navigateToCart}
               size="large"
@@ -236,7 +255,15 @@ const renderMenu = (
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            {user? <Button onClick={handleProfileMenuOpen} color="inherit">Namaste 🙏 {user. displayName ?? user.email}</Button>: <Button onClick={login} color="inherit" >Login</Button>}
+            {user ? (
+              <Button onClick={handleProfileMenuOpen} color="inherit">
+                Namaste 🙏 {user.displayName ?? user.email}
+              </Button>
+            ) : (
+              <Button onClick={login} color="inherit">
+                Login
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
