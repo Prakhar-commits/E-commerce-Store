@@ -10,28 +10,31 @@ import {
   TextField,
   Button,
   Link,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
 import React from "react";
 import { useAuth } from "../firebase/Auth";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const {signUp} = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
- async function registerUser(event){
-      event.preventDefault();
-      const data= new FormData(event.currentTarget);
-     await signUp(data.get("email"), data.get("password") , data.get("name"));
-     navigate("/login");
+  async function registerUser(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    await signUp(data.get("email"), data.get("password"), data.get("name"));
+    navigate("/login");
   }
-  return ( <Container component={"main"} maxWidth="xs">
+  return (
+    <Container component={"main"} maxWidth="xs">
       <CssBaseline />
       <Box
         sx={{
           mt: 8,
           display: "flex",
           flexDirection: "column",
-          alignItems:'center'
+          alignItems: "center",
         }}
       >
         <Avatar
@@ -50,7 +53,8 @@ export default function Register() {
           sx={{
             mt: 3,
           }}
-         onSubmit={registerUser}>
+          onSubmit={registerUser}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -62,7 +66,7 @@ export default function Register() {
                 required
                 autoComplete="given-name"
               ></TextField>
-              </Grid>
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 name="email"
@@ -84,17 +88,27 @@ export default function Register() {
                 autoComplete="new-password"
               ></TextField>
             </Grid>
-            </Grid>
-           <Button type="submit" fullWidth variant='contained' sx={{
-            mt:3, mb:2
-           }}>Register</Button>
-           <Grid container justifyContent={"flex-end"}>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              mb: 2,
+            }}
+          >
+            Register
+          </Button>
+          <Grid container justifyContent={"flex-end"}>
             <Grid item>
-             <Link variant="body2" href="/login">Already have an account? Sign In</Link>
+              <Link variant="body2" href="/login">
+                Already have an account? Sign In
+              </Link>
             </Grid>
-           </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>
-  
-)}
+  );
+}

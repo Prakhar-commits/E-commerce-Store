@@ -55,7 +55,7 @@ useEffect(()=>{
 
 return{
     signIn, signUp , signOut : signOutUser ,user,
-}
+};
 }
 
 export default AuthProvider;
