@@ -241,7 +241,7 @@ export default function Header() {
       >
         <Toolbar sx={{ display: "flex", gap: 2 }}>
           <Typography variant="h6" color="inherit">
-            <StyledLink to="/">Ecomm</StyledLink>
+            <StyledLink to="/">ApkiDukaan</StyledLink>
           </Typography>
           <SearchBar />
           <Box flexBasis={650} sx={{ display: {  md: "flex" } }}>
