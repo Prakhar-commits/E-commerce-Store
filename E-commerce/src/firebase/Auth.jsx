@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const authData = useProvideAuth();
   return (
     <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
@@ -77,3 +77,5 @@ function useProvideAuth() {
     signOut: signOutUser,
   };
 }
+
+export default AuthProvider;
