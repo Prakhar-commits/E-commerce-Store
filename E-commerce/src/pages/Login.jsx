@@ -1,6 +1,13 @@
 import { Button, Grid, useTheme } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, CssBaseline, TextField, Typography , Link } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CssBaseline,
+  TextField,
+  Typography,
+  Link,
+} from "@mui/material";
 import { Container } from "@mui/material";
 
 import React from "react";
@@ -14,9 +21,11 @@ export default function Login() {
   async function login(event) {
     event.preventDefault();
     const { email, password } = event.target;
+
     await signIn(email.value, password.value);
     navigate("/");
   }
+
   return (
     <Container component={"main"} maxWidth="xs">
       <CssBaseline />
